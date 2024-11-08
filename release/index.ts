@@ -1,0 +1,31 @@
+import * as core from '@actions/core';
+import { parse } from "semver";
+import { Octokit } from "@octokit/rest";
+
+
+export async function execute() {
+  const mainBranch = core.getInput("main_branch") || "main"
+  const authToken = core.getInput("auth_token")!
+  const owner = core.getInput("owner")!
+  const repo = core.getInput("repo")!
+  const version = parse(core.getInput("version"))!
+  const tag = core.getInput("tag")!
+
+  const octokit = new Octokit({ auth: authToken });
+
+  const response = await octokit.rest.repos.createRelease({
+    owner: owner,
+    repo: repo,
+    name: `v${version?.toString()}`,
+    tag_name: tag,
+    body: core.getInput("changelog"),
+    target_commitish: mainBranch,
+    draft: false,
+    make_latest: "true",
+  })
+
+  core.setOutput("release_id", response.data.id)
+  core.setOutput("release_url", response.data.url)
+  core.setOutput("release_upload_url", response.data.upload_url)
+}
+

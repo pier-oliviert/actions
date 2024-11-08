@@ -1,0 +1,21 @@
+{
+  "name": "actions",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/semver": "^7.5.8"
+  },
+  "peerDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@octokit/openapi-types": "^22.2.0",
+    "@octokit/rest": "^21.0.2",
+    "@types/js-yaml": "^4.0.9",
+    "js-yaml": "^4.1.0",
+    "octokit": "^4.0.2",
+    "semver": "^7.6.3"
+  }
+}
