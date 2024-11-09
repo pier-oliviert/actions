@@ -17,12 +17,16 @@ export async function execute() {
 
   if (!endHash) {
     console.log("Can't create a changelog as there's no older tag, a changelog will be generated when the next tag is created")
-    process.exit(0)
+    return
   }
+
+  // Retrieving history up to the start of the release
+  await $`git fetch origin ${startHash}`
+  await $`git reset --hard FETCH_HEAD`
 
   // end -> start as the end is the oldest hash and the newest is the commit that was tagged
   // the new version
-  const changelog = await $`git-cliff ${endHash}..${startHash}`.text()
+  const changelog = await $`git - cliff ${startHash}..${endHash} `.text()
 
   const writer = file.writer()
   writer.write(changelog)
@@ -37,7 +41,7 @@ export async function execute() {
   // https://github.com/oven-sh/bun/issues/8745
   const emoji = "📌"
 
-  await $`git add -f ${changelogFile} && git commit -m "${emoji} Changelog for ${version}" && git push origin ${mainBranch}`
+  await $`git add - f ${changelogFile} && git commit - m "${emoji} Changelog for ${version}" && git push origin ${mainBranch} `
 
   core.setOutput('changelog', changelog)
 }
