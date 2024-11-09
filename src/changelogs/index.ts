@@ -26,7 +26,7 @@ export async function execute() {
 
   // end -> start as the end is the oldest hash and the newest is the commit that was tagged
   // the new version
-  const changelog = await $`git - cliff ${startHash}..${endHash} `.text()
+  const changelog = await $`git-cliff ${startHash}..${endHash} `.text()
 
   const writer = file.writer()
   writer.write(changelog)
