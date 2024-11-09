@@ -4,6 +4,7 @@ import { $ } from "bun";
 export async function execute() {
   const changelogFile = core.getInput("changelog_file") || "CHANGELOG.md"
   const mainBranch = core.getInput("main_branch") || "main"
+  const version = core.getInput("version")
   const startHash = core.getInput("version_start_hash")!
   const endHash = core.getInput("version_end_hash")
 
@@ -26,6 +27,8 @@ export async function execute() {
   // the new version
   const changelog = await $`git-cliff ${startHash}..${endHash} `.text()
 
+  await $`git show-ref`
+
   const writer = file.writer()
   writer.write(changelog)
 
@@ -39,7 +42,9 @@ export async function execute() {
   // https://github.com/oven-sh/bun/issues/8745
   const emoji = "📌"
 
-  await $`git add -f ${changelogFile} && git commit -m "${emoji} Changelog" && git push origin ${mainBranch}`
+  await $`git add -f ${changelogFile}`
+  await $`git commit -m "${emoji} Changelog for ${version}"`
+  await $`git push origin ${mainBranch}`
 
   core.setOutput('changelog', changelog)
 }
