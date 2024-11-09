@@ -28,7 +28,7 @@ export async function execute() {
   const changelog = await $`git-cliff ${startHash}..${endHash} `.text()
 
   // Resetting history 
-  await $`git reset --hard origin/${mainBranch}`.quiet()
+  await $`git pull origin ${mainBranch}`.quiet()
 
   const writer = file.writer()
   writer.write(changelog)
