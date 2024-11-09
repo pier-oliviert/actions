@@ -42,7 +42,7 @@ export async function execute() {
   const emoji = "📌"
 
   await $`git add -f ${changelogFile}`
-  await $`git commit -m "${emoji} Changelog for ${version}"`
+  await $`git commit -m "${emoji} Changelog for ${version.toString()}"`
   await $`git push origin ${mainBranch}`
 
   core.setOutput('changelog', changelog)
