@@ -4,7 +4,6 @@ import { $ } from "bun";
 export async function execute() {
   const changelogFile = core.getInput("changelog_file") || "CHANGELOG.md"
   const mainBranch = core.getInput("main_branch") || "main"
-  const version = core.getInput("version")
   const startHash = core.getInput("version_start_hash")!
   const endHash = core.getInput("version_end_hash")
 
@@ -21,12 +20,15 @@ export async function execute() {
   }
 
   // Retrieving history up to the start of the release
-  await $`git fetch origin ${startHash}`
-  await $`git reset --hard FETCH_HEAD`
+  await $`git fetch origin ${startHash}`.quiet()
+  await $`git reset --hard FETCH_HEAD`.quiet()
 
   // end -> start as the end is the oldest hash and the newest is the commit that was tagged
   // the new version
   const changelog = await $`git-cliff ${startHash}..${endHash} `.text()
+
+  // Resetting history 
+  await $`git reset --hard origin/${mainBranch}`.quiet()
 
   const writer = file.writer()
   writer.write(changelog)
@@ -41,7 +43,7 @@ export async function execute() {
   // https://github.com/oven-sh/bun/issues/8745
   const emoji = "📌"
 
-  await $`git add -f ${changelogFile} && git commit -m "${emoji} Changelog for ${version}" && git push origin ${mainBranch} `
+  await $`git add -f ${changelogFile} && git commit -m "${emoji} Changelog" && git push origin ${mainBranch}`
 
   core.setOutput('changelog', changelog)
 }
