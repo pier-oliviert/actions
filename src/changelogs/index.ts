@@ -28,6 +28,7 @@ export async function execute() {
   const changelog = await $`git-cliff ${startHash}..${endHash} `.text()
 
   await $`git show-ref`
+  await $`git checkout origin ${mainBranch}`
 
   const writer = file.writer()
   writer.write(changelog)
