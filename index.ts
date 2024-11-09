@@ -1,8 +1,8 @@
 import { parseArgs } from "util";
-import { execute as executeVersion } from "./versions/index"
-import { execute as executeRelease } from "./release/index"
-import { execute as executeHelm } from "./helm/index"
-import { execute as executeChangelogs } from "./changelogs//index"
+import { execute as executeVersion } from "./src/versions/index"
+import { execute as executeRelease } from "./src/release/index"
+import { execute as executeHelm } from "./src/helm/index"
+import { execute as executeChangelogs } from "./src/changelogs/index"
 
 const { positionals } = parseArgs({
   args: Bun.argv,

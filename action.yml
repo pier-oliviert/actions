@@ -1,0 +1,9 @@
+name: "Release pipeline"
+description: "Multiple actions that can be used to create releases"
+inputs:
+  auth_token:
+    description: "Github Token"
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
