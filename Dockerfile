@@ -8,5 +8,4 @@ COPY index.ts .
 
 RUN bun install
 
-RUN ls -la
-CMD ["bun", "/actions/index.ts"]
+ENTRYPOINT [ "bun" ]
