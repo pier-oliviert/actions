@@ -4,6 +4,6 @@ WORKDIR /actions
 COPY package.json .
 COPY bun.lockb .
 COPY src .
-COPY index.ts index.ts
+COPY index.ts .
 
 RUN bun install
