@@ -22,6 +22,12 @@ inputs:
     description: Upload URL for the release assets
   tmp_path:
     description: Location to store temporary data (defaults to "/tmp/charts")
+  version:
+    description: Version generated, ie. "v0.0.1" -> "0.0.1"
+  version_start_hash:
+    description: Commit SHA that was tagged with the new version (0.0.2)
+  version_end_hash:
+    description: Commit SHA tagged for the previous version (0.0.1)
 
 outputs:
   version:
