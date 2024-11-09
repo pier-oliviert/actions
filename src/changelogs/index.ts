@@ -19,6 +19,9 @@ export async function execute() {
     return
   }
 
+  // Retrieving history up to the start of the release
+  await $`git fetch origin ${startHash}`.quiet()
+
   // end -> start as the end is the oldest hash and the newest is the commit that was tagged
   // the new version
   const changelog = await $`git-cliff ${startHash}..${endHash} `.text()
