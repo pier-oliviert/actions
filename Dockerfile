@@ -9,4 +9,4 @@ COPY index.ts .
 RUN bun install
 
 RUN ls -la
-CMD ["bun", "./index.ts"]
+CMD ["bun", "/actions/index.ts"]
