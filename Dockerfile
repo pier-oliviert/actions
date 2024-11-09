@@ -1,6 +1,6 @@
 FROM oven/bun:latest
 
-WORKDIR /action
+WORKDIR /actions
 COPY package.json ./
 COPY bun.lockb ./
 COPY src ./src/
@@ -8,3 +8,4 @@ COPY index.ts .
 
 RUN bun install
 
+CMD ["bun", "index.ts"]
