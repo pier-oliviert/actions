@@ -14,10 +14,10 @@ interface Tag {
 }
 
 export async function execute() {
-  let envName = core.getInput("version_variable") || "VERSION"
+  const authToken = core.getInput("auth_token")!
+  let envName = core.getInput("variable") || "VERSION"
   const changelogFile = core.getInput("changelog_file") || "CHANGELOG.md"
   const mainBranch = core.getInput("main_branch") || "main"
-  const authToken = core.getInput("auth_token")!
   const owner = core.getInput("owner")!
   const repo = core.getInput("repo")!
 
@@ -103,7 +103,6 @@ export async function execute() {
   await $`git add -f ${changelogFile} && git commit -m "${emoji} Changelog for ${bounds.newer?.version}" && git push origin ${mainBranch}`
 
   core.setOutput('previousVersion', bounds.older?.version);
-  core.setOutput('nextVersion', bounds.newer?.version);
   core.setOutput('releaseHash', bounds.newer?.commit);
   core.setOutput('changelog', changelog)
 }

@@ -59,13 +59,14 @@ export async function execute() {
   if (version?.compare(parse(variable?.value) || "") == 1) {
     console.log(`Updating version variable to ${version?.toString()}`)
 
-    const response = await octokit.request('PATCH /repos/{owner}/{repo}/actions/variables/{name}', {
+    await octokit.request('PATCH /repos/{owner}/{repo}/actions/variables/{name}', {
       owner: owner,
       repo: repo,
       name: envName,
       value: `v${version?.toString()}`
     })
-    core.setOutput('version', version)
+
+    core.setOutput('version', version.toString())
     core.setOutput('tag', tag?.name)
     process.exit(0)
   }

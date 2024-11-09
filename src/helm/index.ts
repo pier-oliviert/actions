@@ -37,7 +37,7 @@ export async function execute() {
   const chartFile = core.getInput("chart_yaml") || "Chart.yaml"
   const helmDestPath = core.getInput("tmp_path") || "/tmp/charts/"
   const uploadURL = core.getInput("release_upload_url")!
-  const branch = "gh-pages"
+  const branch = core.getInput("page_branch") || "gh-pages"
   const indexLocation = "./index.yaml"
 
   const octokit = new Octokit({ auth: authToken });
