@@ -41,7 +41,7 @@ export async function execute() {
   // https://github.com/oven-sh/bun/issues/8745
   const emoji = "📌"
 
-  await $`git add - f ${changelogFile} && git commit - m "${emoji} Changelog for ${version}" && git push origin ${mainBranch} `
+  await $`git add -f ${changelogFile} && git commit -m "${emoji} Changelog for ${version}" && git push origin ${mainBranch} `
 
   core.setOutput('changelog', changelog)
 }

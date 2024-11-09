@@ -20,6 +20,8 @@ inputs:
     description: Name of the branch where pages are committed (defaults to gh-pages)
   release_upload_url:
     description: Upload URL for the release assets
+  tag:
+    description: Name of the tag
   tmp_path:
     description: Location to store temporary data (defaults to "/tmp/charts")
   version:
