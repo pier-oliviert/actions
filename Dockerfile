@@ -8,4 +8,5 @@ COPY index.ts .
 
 RUN bun install
 
-CMD ["bun"]
+RUN ls -la
+CMD ["bun", "./index.ts"]
