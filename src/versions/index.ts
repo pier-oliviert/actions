@@ -5,14 +5,13 @@ import { Octokit } from "@octokit/core";
 export async function execute() {
   let envName = core.getInput("variable") || "VERSION"
   const authToken = core.getInput("auth_token")!
-  const owner = core.getInput("owner")!
-  const repo = core.getInput("repo")!
+  const repoPath = core.getInput("repo")!
 
   // Create a personal access token at https://github.com/settings/tokens/new?scopes=repo
   const octokit = new Octokit({ auth: authToken });
 
-  const tags = await octokit.request('GET /repos/{owner}/{repo}/tags', {
-    owner: owner,
+  const [owner, repo] = repoPath.split("/")
+  const tags = await octokit.request('GET /repos/{repo}/tags', {
     repo: repo,
     per_page: 4,
   })

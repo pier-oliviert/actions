@@ -4,10 +4,8 @@ inputs:
   auth_token:
     description: "Github Token"
     required: true
-  owner:
-    description: Repo owner, can be the username or the organization name
   repo:
-    description: Name of the repo
+    description: Name of the repo including the org/user, ie. pier-oliviert/phonebook
   variable:
     description: Name of the repository variable you want to store the version into.
   changelog_file:

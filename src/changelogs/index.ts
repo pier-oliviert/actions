@@ -18,8 +18,9 @@ export async function execute() {
   let envName = core.getInput("variable") || "VERSION"
   const changelogFile = core.getInput("changelog_file") || "CHANGELOG.md"
   const mainBranch = core.getInput("main_branch") || "main"
-  const owner = core.getInput("owner")!
-  const repo = core.getInput("repo")!
+  const repoPath = core.getInput("repo")!
+
+  const [owner, repo] = repoPath.split("/")
 
   // Create a personal access token at https://github.com/settings/tokens/new?scopes=repo
   const octokit = new Octokit({ auth: authToken });
