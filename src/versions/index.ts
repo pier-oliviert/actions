@@ -95,12 +95,10 @@ export async function execute() {
     value: `v${bounds.newer.version.toString()}`
   })
 
-  core.setOutput('version', bounds.newer.version.toString())
   core.setOutput('tag', bounds.newer.name)
+  core.setOutput('version', bounds.newer.version.toString())
   core.setOutput('version_start_hash', bounds.newer.commit)
   core.setOutput('version_end_hash', bounds.older?.commit)
-  core.debug(`version start hash: ${bounds.newer.commit}`)
-  core.debug(`version end hash: ${bounds.older?.commit}`)
 
   return
 }
