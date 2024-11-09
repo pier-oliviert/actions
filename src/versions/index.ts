@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import { parse, SemVer } from "semver";
 import { Octokit } from "@octokit/core";
+import { version } from 'bun';
 
 interface Range {
   older?: Tag
@@ -82,10 +83,10 @@ export async function execute() {
     core.setOutput('version', bounds.newer.version.toString())
     core.setOutput('tag', bounds.newer.name)
     core.setOutput('version_start_hash', bounds.newer.commit)
-    process.exit(0)
+    return
   }
 
-  console.log(`Updating version variable to ${bounds.newer.version.toString()}`)
+  console.log(`Updating ${version} to ${bounds.newer.version.toString()}`)
 
   await octokit.request('PATCH /repos/{owner}/{repo}/actions/variables/{name}', {
     owner: owner,
@@ -98,5 +99,8 @@ export async function execute() {
   core.setOutput('tag', bounds.newer.name)
   core.setOutput('version_start_hash', bounds.newer.commit)
   core.setOutput('version_end_hash', bounds.older?.commit)
-  process.exit(0)
+  core.debug(`version start hash: ${bounds.newer.commit}`)
+  core.debug(`version end hash: ${bounds.older?.commit}`)
+
+  return
 }
