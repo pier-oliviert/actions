@@ -11,7 +11,8 @@ export async function execute() {
   const octokit = new Octokit({ auth: authToken });
 
   const [owner, repo] = repoPath.split("/")
-  const tags = await octokit.request('GET /repos/{repo}/tags', {
+  const tags = await octokit.request('GET /repos/{owner}/{repo}/tags', {
+    owner: owner,
     repo: repo,
     per_page: 4,
   })
