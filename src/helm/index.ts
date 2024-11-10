@@ -54,6 +54,7 @@ export async function execute() {
 
   if (await branchExists(branch)) {
     await $`git switch ${branch}`
+    await $`git pull origin ${branch} --rebase`
   } else {
     await $`git switch -c ${branch}`
   }
