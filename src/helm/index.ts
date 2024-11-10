@@ -57,6 +57,7 @@ export async function execute() {
     await $`git pull origin ${branch} --rebase`
   } else {
     await $`git switch -c ${branch}`
+    await $`git pull origin ${branch} --rebase`
   }
 
   const index = Bun.file(indexLocation)
