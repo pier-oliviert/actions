@@ -40,14 +40,7 @@ switch (positionals[3]) {
 }
 
 // Linux permission fixes for the workspace to work with git tools
-console.log("Modifying workspace permissions")
-
-console.log($`cut -d: -f1 -f 3 /etc/passwd`.text())
-
-const previous = await $`stat -c "%u:%g" .`.quiet().text()
-console.log(previous)
+await $`stat -c "%u:%g" .`
 await $`chown -R "$(id -u)" .`
 
 await task()
-
-await $`chown -f -R "${previous}" .`
