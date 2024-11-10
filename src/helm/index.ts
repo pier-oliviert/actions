@@ -55,6 +55,9 @@ export async function execute() {
     await $`git switch --orphan ${branch}`
   }
 
+  await $`git pull origin ${branch}`
+
+
   const index = Bun.file(indexLocation)
   const manifest = await mergeManifests(pkgManifest, index)
 
