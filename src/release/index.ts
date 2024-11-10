@@ -24,8 +24,8 @@ export async function execute() {
     make_latest: "true",
   })
 
-  core.setOutput("release_id", response.data.id)
-  core.setOutput("release_url", response.data.url)
-  core.setOutput("release_upload_url", response.data.upload_url)
+  core.setOutput("id", response.data.id)
+  core.setOutput("url", response.data.url)
+  core.setOutput("upload_url", response.data.upload_url)
 }
 
