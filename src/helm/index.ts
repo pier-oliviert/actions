@@ -42,9 +42,6 @@ export async function execute() {
 
   const octokit = new Octokit({ auth: authToken });
 
-  const currentBranch = (await $`git rev-parse --abbrev-ref HEAD`.quiet().text()).trim()
-  console.log(currentBranch)
-
   let chart = yaml.load(await Bun.file(`${path.join(chartPath, chartFile)}`).text()) as Chart
 
   await $`helm package ${chartPath} -d ${helmDestPath}`
@@ -54,10 +51,8 @@ export async function execute() {
 
   if (await branchExists(branch)) {
     await $`git switch ${branch}`
-    await $`git pull origin ${branch} --rebase`
   } else {
-    await $`git switch -c ${branch}`
-    await $`git pull origin ${branch} --rebase`
+    await $`git switch --orphan ${branch}`
   }
 
   const index = Bun.file(indexLocation)
@@ -92,7 +87,6 @@ export async function execute() {
   await $`git add ${indexLocation}`
   await $`git commit -m "${helmEmoji} deployed"`
   await $`git push origin ${branch}`
-  await $`git switch ${currentBranch}`
 }
 
 async function branchExists(branch: string): Promise<boolean> {
