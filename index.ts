@@ -39,6 +39,7 @@ switch (positionals[3]) {
     process.exit(1)
 }
 
+console.log(await $`stat -c "%u:%g ."`.quiet().text())
 // Linux permission fixes for the workspace to work with git tools
 console.log("Modifying workspace permissions")
 await $`chown -R "$(id -u)" .`
