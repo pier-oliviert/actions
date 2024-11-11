@@ -8,6 +8,7 @@ Here's the options you can use with this action, **bold names** means it's requi
 |--|--|--|
 |**auth_token**| |Filename of where you want to have the changelogs committed.|
 |**release_upload_url**||filename of where you want to have the changelogs committed.|
+|**version**||Version to use for the AppVersion in the helm chart|
 |charts|`charts/`|Owner of the repo (user or organization)|
 |chart_yaml|`Chart.yaml`|Name of the repository you want to create the changelogs|
 |tmp_path|`/tmp/charts`|the name of the repo variable you want to use.|

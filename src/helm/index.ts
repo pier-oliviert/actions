@@ -33,6 +33,7 @@ interface Entry {
 
 export async function execute() {
   const authToken = core.getInput("auth_token")!
+  const version = core.getInput("version")!
   const chartPath = core.getInput("charts") || "charts/"
   const chartFile = core.getInput("chart_yaml") || "Chart.yaml"
   const helmDestPath = core.getInput("tmp_path") || "/tmp/charts/"
@@ -44,7 +45,7 @@ export async function execute() {
 
   let chart = yaml.load(await Bun.file(`${path.join(chartPath, chartFile)}`).text()) as Chart
 
-  await $`helm package ${chartPath} -d ${helmDestPath}`
+  await $`helm package ${chartPath} -d ${helmDestPath} --version ${version}`
   await $`helm repo index ${helmDestPath}`
 
   let pkgManifest = yaml.load(await Bun.file(`${helmDestPath}/index.yaml`).text()) as Manifest
