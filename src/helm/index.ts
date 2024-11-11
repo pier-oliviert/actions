@@ -53,9 +53,8 @@ export async function execute() {
     await $`git switch ${branch}`
   } else {
     await $`git switch --orphan ${branch}`
+    await $`git pull origin ${branch}`
   }
-
-  await $`git pull origin ${branch}`
 
 
   const index = Bun.file(indexLocation)
