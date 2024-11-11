@@ -93,9 +93,12 @@ export async function execute() {
 }
 
 async function branchExists(branch: string): Promise<boolean> {
-  const { exitCode } = await $`git rev-parse --quiet --verify ${branch}`.nothrow().quiet()
+  const { exitCode, stdout } = await $`git ls-remote rev-parse --quiet --verify ${branch}`.nothrow().quiet()
+  if (exitCode != 0 || stdout.length == 0) {
+    return false
+  }
 
-  return exitCode == 0
+  return true
 }
 
 async function mergeManifests(release: Manifest, index: BunFile): Promise<Manifest> {
