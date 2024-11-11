@@ -51,9 +51,9 @@ export async function execute() {
 
   if (await branchExists(branch)) {
     await $`git switch ${branch}`
+    await $`git pull origin ${branch}`
   } else {
     await $`git switch --orphan ${branch}`
-    await $`git pull origin ${branch}`
   }
 
 
