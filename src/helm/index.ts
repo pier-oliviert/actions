@@ -51,9 +51,11 @@ export async function execute() {
   let pkgManifest = yaml.load(await Bun.file(`${helmDestPath}/index.yaml`).text()) as Manifest
 
   if (await branchExists(branch)) {
+    console.log("Branch exists, switching and updating")
     await $`git switch ${branch}`
-    await $`git pull origin ${branch}`
+    await $`git pull origin ${branch} --rebase`
   } else {
+    console.log("Branch does not exist, creating")
     await $`git switch --orphan ${branch}`
   }
 
