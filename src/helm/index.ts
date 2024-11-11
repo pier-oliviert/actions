@@ -96,6 +96,7 @@ export async function execute() {
 
 async function branchExists(branch: string): Promise<boolean> {
   const { exitCode, stdout } = await $`git ls-remote --heads origin /refs/heads/${branch}`
+  console.log(stdout)
   if (exitCode != 0 || stdout.length == 0) {
     return false
   }
