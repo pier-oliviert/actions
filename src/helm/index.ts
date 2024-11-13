@@ -45,7 +45,7 @@ export async function execute() {
 
   let chart = yaml.load(await Bun.file(`${path.join(chartPath, chartFile)}`).text()) as Chart
 
-  await $`helm package ${chartPath} -d ${helmDestPath} --version ${version}`
+  await $`helm package ${chartPath} -d ${helmDestPath} --app-version ${version} --version ${version}`
   await $`helm repo index ${helmDestPath}`
 
   let pkgManifest = yaml.load(await Bun.file(`${helmDestPath}/index.yaml`).text()) as Manifest
@@ -96,7 +96,6 @@ export async function execute() {
 
 async function branchExists(branch: string): Promise<boolean> {
   const { exitCode, stdout } = await $`git ls-remote --heads origin refs/heads/${branch}`
-  console.log(stdout)
   if (exitCode != 0 || stdout.length == 0) {
     return false
   }
