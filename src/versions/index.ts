@@ -32,7 +32,7 @@ export async function execute() {
   console.log("Getting the most recent versionned tag")
   let bounds: Range = {}
 
-  for (let t of tags.data) {
+  for (let t of tags.data.reverse()) {
     const version = parse(t.name)
     if (!version) {
       continue
