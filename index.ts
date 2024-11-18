@@ -39,4 +39,6 @@ switch (positionals[3]) {
     process.exit(1)
 }
 
+await $`git config --global --add safe.directory /github/workspace`.quiet()
+
 await task()
