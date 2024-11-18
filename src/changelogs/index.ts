@@ -7,7 +7,6 @@ interface CommitRange {
 }
 
 export async function execute() {
-  const mainBranch = core.getInput("main_branch") || "main"
   const commits: CommitRange = {
     start: core.getInput("commit_start"),
     end: core.getInput("commit_end")!
@@ -19,8 +18,7 @@ export async function execute() {
   }
 
   // Retrieving history up to the start of the release
-  await $`git fetch origin ${commits.start}`
-  await $`git checkout ${mainBranch}`
+  await $`git fetch origin ${commits.start} ${commits.end}`
 
   // end -> start as the end is the oldest hash and the newest is the commit that was tagged
   // the new version
