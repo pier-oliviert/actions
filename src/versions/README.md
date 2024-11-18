@@ -11,18 +11,15 @@ bold names mean the environment variable is **required** and needs to be set by 
 
 |name|default|description|
 |--|--|--|
-|**auth_token**| |filename of where you want to have the changelogs committed.|
-|**owner**| |owner of the repo (user or organization)|
-|**repo**| |name of the repository you want to create the changelogs|
-|variable|`version`|the name of the repo variable you want to use.|
+|format|`v*`|The format of the tags that you use for versioning.|
 
 ## outputs
 
 |name|description|
 |--|--|
-|previousVersion|The name of the previous version that was tagged (`v0.0.1`)|
-|nextVersion|The name of the version that triggered this action (`v0.0.2`)|
-|releaseHash|The hash of the commit that points to the nextVersion tag|
-|changelog|The generated changelog, to be used by other actions|
+|tag|The name of the tag for the version generated (`v0.0.2`)|
+|version|The semVer result for the tag's name (`0.0.2`)|
+|commit_end|The commit sha for the tags|
+|commit_start|The hash of the commit that points to the previous version, if any|
 
 ## usage

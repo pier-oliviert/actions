@@ -1,21 +1,19 @@
 import * as core from '@actions/core';
 import { $ } from "bun";
 
+interface CommitRange {
+  start?: string
+  end: string
+}
+
 export async function execute() {
-  const changelogFile = core.getInput("changelog_file") || "CHANGELOG.md"
   const mainBranch = core.getInput("main_branch") || "main"
-  const version = core.getInput("version")
-  const startHash = core.getInput("version_start_hash")!
-  const endHash = core.getInput("version_end_hash")
-
-  const file = Bun.file(changelogFile);
-  let content
-
-  if (await file.exists()) {
-    content = await file.text()
+  const commits: CommitRange = {
+    start: core.getInput("commit_start"),
+    end: core.getInput("commit_end")!
   }
 
-  if (!endHash) {
+  if (!commits.start) {
     console.log("Can't create a changelog as there's no older tag, a changelog will be generated when the next tag is created")
     return
   }
@@ -26,24 +24,9 @@ export async function execute() {
 
   // end -> start as the end is the oldest hash and the newest is the commit that was tagged
   // the new version
-  const changelog = await $`git-cliff ${startHash}..${endHash} `.text()
+  const changelog = await $`git-cliff ${commits.start}..${commits.end} `.text()
 
-  const writer = file.writer()
-  writer.write(changelog)
-
-  if (content) {
-    writer.write(content)
-  }
-
-  writer.flush()
-
-  // FIXUP: Bun will escape emojis if they aren't provided as input to the shell command.
-  // https://github.com/oven-sh/bun/issues/8745
-  const emoji = "📌"
-
-  await $`git add -f ${changelogFile}`
-  await $`git commit -m "${emoji} Changelog"`
-  await $`git push origin ${mainBranch}`
+  Bun.write(Bun.stdout, changelog)
 
   core.setOutput('changelog', changelog)
 }

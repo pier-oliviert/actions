@@ -1,104 +1,47 @@
 import * as core from '@actions/core';
 import { parse, SemVer } from "semver";
-import { Octokit } from "@octokit/core";
-import { version } from 'bun';
-
-interface Range {
-  older?: Tag
-  newer?: Tag
-}
+import { $ } from 'bun';
 
 interface Tag {
   name: string
-  commit: string
+  commits: CommitRange
   version: SemVer
 }
 
+interface CommitRange {
+  start: string
+  end: string
+}
+
 export async function execute() {
-  let envName = core.getInput("variable") || "VERSION"
-  const authToken = core.getInput("auth_token")!
-  const repoPath = core.getInput("repo")!
+  const tagFormat = core.getInput("format") || "v*"
 
-  // Create a personal access token at https://github.com/settings/tokens/new?scopes=repo
-  const octokit = new Octokit({ auth: authToken });
+  // Fetch the most recent tags
+  await $`git fetch origin --tags`
+  const output = await $`git for-each-ref --sort "-v:refname" --count=2 --format='%(refname:short) %(objectname)' 'refs/tags/${tagFormat}'`.text()
 
-  const [owner, repo] = repoPath.split("/")
-  const tags = await octokit.request('GET /repos/{owner}/{repo}/tags', {
-    owner: owner,
-    repo: repo,
-    per_page: 4,
+  const tags = output.split("\n").map(value => {
+    return value.split(" ")
   })
 
-  console.log("Getting the most recent versionned tag")
-  let bounds: Range = {}
-
-  for (let t of tags.data.reverse()) {
-    const version = parse(t.name)
-    if (!version) {
-      continue
-    }
-
-    if (!bounds.newer) {
-      bounds.newer = {
-        commit: t.commit.sha,
-        name: t.name,
-        version: version,
-      }
-      continue
-    }
-
-    if (bounds.newer.version.compare(version) == 1) {
-      bounds.older = {
-        commit: t.commit.sha,
-        name: t.name,
-        version: version,
-      }
-    }
+  const semVer = parse(tags[0][0])!
+  const tag: Tag = {
+    name: semVer.raw,
+    version: semVer,
+    commits: commitRanges(tags)
   }
 
-  if (!bounds.newer) {
-    core.setFailed("No version found in the last 4 tags on this repo.");
-  }
-
-  bounds.newer = bounds.newer!
-
-  const variables = await octokit.request('GET /repos/{owner}/{repo}/actions/variables', {
-    owner: owner,
-    repo: repo,
-  })
-
-
-  const variable = variables.data.variables.find(v => v.name == envName)
-
-  if (!variable) {
-    console.log("Never created a version variable. Creating...")
-
-    await octokit.request('POST /repos/{owner}/{repo}/actions/variables', {
-      owner: owner,
-      repo: repo,
-      name: envName,
-      value: `v${bounds.newer.version.toString()}`
-    })
-
-    core.setOutput('version', bounds.newer.version.toString())
-    core.setOutput('tag', bounds.newer.name)
-    core.setOutput('version_start_hash', bounds.newer.commit)
-    return
-  }
-
-  console.log(`Updating ${version} to ${bounds.newer.version.toString()}`)
-
-  await octokit.request('PATCH /repos/{owner}/{repo}/actions/variables/{name}', {
-    owner: owner,
-    repo: repo,
-    name: envName,
-    value: `v${bounds.newer.version.toString()}`
-  })
-
-  core.setOutput('tag', bounds.newer.name)
-  core.setOutput('version', bounds.newer.version.toString())
-  core.setOutput('version_start_hash', bounds.older?.commit)
-  core.setOutput('version_end_hash', bounds.newer.commit)
+  core.setOutput('tag', tag.name)
+  core.setOutput('version', tag.version.toString())
+  core.setOutput('commit_end', tag.commits.end)
+  core.setOutput('commit_start', tag.commits.start)
 
   return
+}
+
+function commitRanges(tags: string[][]): CommitRange {
+  return {
+    start: tags[1][1],
+    end: tags[0][1],
+  }
 }
