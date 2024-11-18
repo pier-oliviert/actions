@@ -10,6 +10,8 @@ inputs:
     description: Name of the repository variable you want to store the version into.
   main_branch:
     description: Name of the main branch for this repo (defaults to "main")
+  changelog:
+    description: The changelog generated for this release
   charts:
     description: Path where the chart is located (defaults to "charts/")
   chart_yaml:
