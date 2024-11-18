@@ -37,7 +37,7 @@ export async function execute() {
   const chartPath = core.getInput("charts") || "charts/"
   const chartFile = core.getInput("chart_yaml") || "Chart.yaml"
   const helmDestPath = core.getInput("tmp_path") || "/tmp/charts/"
-  const uploadURL = core.getInput("release_upload_url")!
+  const uploadURL = core.getInput("upload_url")!
   const branch = core.getInput("page_branch") || "gh-pages"
   const indexLocation = "./index.yaml"
 
@@ -73,7 +73,7 @@ export async function execute() {
 
         const response = await octokit.request(`POST ${uploadURL}`, {
           name: name,
-          data: Bun.file(path.join(helmDestPath, name)),
+          data: pkg.bytes(),
         })
         entry.urls[urlKey] = response.data.browser_download_url
       }
