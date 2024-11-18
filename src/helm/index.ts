@@ -73,7 +73,7 @@ export async function execute() {
 
         const response = await octokit.request(`POST ${uploadURL}`, {
           name: name,
-          data: pkg.bytes(),
+          data: pkg,
         })
         entry.urls[urlKey] = response.data.browser_download_url
       }
