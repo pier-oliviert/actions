@@ -18,7 +18,7 @@ inputs:
     description: Name of the Chart.yaml file (defaults to Chart.yaml)
   page_branch:
     description: Name of the branch where pages are committed (defaults to gh-pages)
-  release_upload_url:
+  upload_url:
     description: Upload URL for the release assets
   tag:
     description: Name of the tag
@@ -46,7 +46,7 @@ outputs:
     description: ID of the release that was created
   release_url:
     description: URL of the release that was created
-  release_upload_url:
+  upload_url:
     description: Upload URL for release assets
 runs:
   using: "docker"
