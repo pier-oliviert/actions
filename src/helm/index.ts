@@ -32,12 +32,12 @@ interface Entry {
 }
 
 export async function execute() {
-  const authToken = core.getInput("auth_token")!
-  const version = core.getInput("version")!
+  const authToken = core.getInput("auth_token", { required: true })
+  const version = core.getInput("version", { required: true })
   const chartPath = core.getInput("charts") || "charts/"
   const chartFile = core.getInput("chart_yaml") || "Chart.yaml"
   const helmDestPath = core.getInput("tmp_path") || "/tmp/charts/"
-  const uploadURL = core.getInput("upload_url")!
+  const uploadURL = core.getInput("upload_url", { required: true })
   const branch = core.getInput("page_branch") || "gh-pages"
   const indexLocation = "./index.yaml"
 
