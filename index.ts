@@ -39,8 +39,4 @@ switch (positionals[3]) {
     process.exit(1)
 }
 
-// Linux permission fixes for the workspace to work with git tools
-await $`stat -c "%u:%g" .`
-await $`chown -R "$(id -u)" .`
-
 await task()

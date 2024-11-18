@@ -19,7 +19,7 @@ export async function execute() {
   }
 
   // Retrieving history up to the start of the release
-  await $`git fetch origin ${mainBranch}`
+  await $`git fetch origin ${commits.start}`
   await $`git checkout ${mainBranch}`
 
   // end -> start as the end is the oldest hash and the newest is the commit that was tagged
